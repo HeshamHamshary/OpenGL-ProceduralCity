@@ -3,22 +3,14 @@
 #include <glm/glm.hpp>
 #include "../wolf/wolf.h"
 #include "../samplefw/SampleRunner.h"
-#include "sampleClipSpace.h"
-#include "sampleClipSpaceColors.h"
-#include "sampleOrtho.h"
-#include "samplePerspective.h"
-#include "sampleWorldTransform.h"
+#include "sampleAlphaTest.h"
 
 class Week2: public App
 {
 public:
     Week2() : App("Week 4")
     {
-        m_sampleRunner.addSample(new SampleClipSpace(this));
-        m_sampleRunner.addSample(new SampleClipSpaceColors(this));
-        m_sampleRunner.addSample(new SampleOrtho(this));
-        m_sampleRunner.addSample(new SamplePerspective(this));
-        m_sampleRunner.addSample(new SampleWorldTransform(this));
+        m_sampleRunner.addSample(new SampleAlphaTest(this));
     }
 
     ~Week2()

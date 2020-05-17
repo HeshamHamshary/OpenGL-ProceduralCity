@@ -6,12 +6,14 @@ find_package(OpenGL REQUIRED)
 
 add_subdirectory(thirdparty/glfw)
 add_subdirectory(thirdparty/glm)
+add_subdirectory(thirdparty/assimp)
 add_subdirectory(thirdparty/glew/build/cmake)
 
 include_directories(
     thirdparty/glfw/include 
     thirdparty/glm 
     thirdparty/glew/include 
+    thirdparty/assimp/include 
     ${OPENGL_INCLUDE_DIRS})
 
 file(GLOB_RECURSE SAMPLEFW_SOURCE_FILES 
@@ -47,7 +49,7 @@ add_executable(sample
     ${HEADER_FILES}
     )
 
-target_link_libraries(sample glfw glew ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES})
+target_link_libraries(sample assimp glfw glew ${OPENGL_LIBRARIES} ${GLFW_LIBRARIES})
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
