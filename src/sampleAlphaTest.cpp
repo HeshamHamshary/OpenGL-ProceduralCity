@@ -57,7 +57,7 @@ void SampleAlphaTest::init()
     const aiScene* pScene;   
 
     Assimp::Importer importer;
-    pScene = importer.ReadFile("test.fbx", aiProcess_Triangulate | aiProcess_LimitBoneWeights);
+    pScene = importer.ReadFile("data/unreal.fbx", aiProcess_Triangulate | aiProcess_LimitBoneWeights);
     if(!pScene)
         printf("Scene is null\n");
     _printInfoAboutScene(pScene);
