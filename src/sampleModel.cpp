@@ -4,6 +4,8 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+void _focusOn(const glm::vec3& min, const glm::vec3& max);
+
 class SingleMaterialProvider : public wolf::Model::MaterialProvider
 {
 public:
@@ -41,7 +43,13 @@ void SampleModel::init()
         SingleMaterialProvider matProvider("mesh");
         m_pModel = new wolf::Model("data/unreal.fbx", matProvider);
 
-        m_pGrid = new Grid3D(200.0f);
+        glm::vec3 min = m_pModel->getAABBMin();
+        glm::vec3 max = m_pModel->getAABBMax();
+        glm::vec3 center = m_pModel->getAABBCenter();
+        _focusOn(min, max);
+
+        float gridSize = 2.5f * wolf::max(max.x,max.z);
+        m_pGrid = new Grid3D(10, gridSize / 10.0f);
     }
 
     printf("Successfully initialized Simple Model Sample\n");
@@ -53,6 +61,11 @@ float m_distance = 600.0f;
 glm::vec3 m_offset(0.0f,0.0f,0.0f);
 glm::vec3 m_position(0.0f,0.0f,0.0f);
 glm::vec3 m_target(0.0f,0.0f,0.0f);
+glm::vec3 m_focusMin(0.0f,0.0f,0.0f);
+glm::vec3 m_focusMax(0.0f,0.0f,0.0f);
+float m_fov = glm::radians(60.0f);
+float m_near = 0.1f;
+float m_far = 1000.0f;
 
 void _rotate(const glm::vec2& mouseMovement)
 {
@@ -85,6 +98,30 @@ void _pan(const glm::vec2& mouseMovement)
 
     m_offset += side;
     m_offset += up;
+
+}    
+
+float _calculateRequiredDistance() 
+{
+    glm::vec3 min = m_focusMin;
+    glm::vec3 max = m_focusMax;
+    glm::vec3 center = min + ((max - min) * 0.5f);
+    float r = wolf::max(glm::distance(center,min), glm::distance(center,max));
+
+    return (r * 2.0f) / tan(m_fov / 1.5);
+}
+
+void _focusOn(const glm::vec3& min, const glm::vec3& max) 
+{
+    m_focusMin = min;
+    m_focusMax = max;
+    m_offset = glm::vec3(0.0f,0.0f,0.0f);
+    m_rotX = -MATH_PI / 4.0f;
+    m_rotY = MATH_PI / 4.0f;
+
+    m_target = min + ((max - min) * 0.5f);
+
+    m_distance = _calculateRequiredDistance();
 }
 
 void SampleModel::update(float dt) 
@@ -101,6 +138,22 @@ void SampleModel::update(float dt)
     {
         glm::vec2 mouseMovement = mousePos - lastMousePos;
         _pan(mouseMovement);
+    }
+
+    glm::vec2 mouseScroll = m_pApp->getMouseScroll();
+
+    if(mouseScroll.y > 0) {
+        m_distance -= (m_distance / 5.0);
+    } else if(mouseScroll.y < 0) {
+        m_distance += (m_distance / 5.0);
+    }
+
+    m_far = m_distance * 2.0f;
+    m_near = m_distance / 10.0f;
+
+    if(m_pApp->isKeyDown('f'))
+    {
+        _focusOn(m_focusMin,m_focusMax);
     }
 
     lastMousePos = mousePos;
@@ -129,8 +182,8 @@ void SampleModel::render(int width, int height)
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glm::mat4 mProj = glm::perspective(glm::radians(60.0f), (float)width / (float)height, 0.1f, 1000.0f);
-	glm::mat4 mView = _getViewMatrix();//glm::lookAt(glm::vec3(0.0f,150.0f,400.0f), glm::vec3(0.0f,100.0f,0.0f), glm::vec3(0.0f,1.0f,0.0f));
+	glm::mat4 mProj = glm::perspective(glm::radians(60.0f), (float)width / (float)height, m_near, m_far);
+	glm::mat4 mView = _getViewMatrix();
 	glm::mat4 mWorld = glm::rotate(glm::mat4(1.0f), m_rot, glm::vec3(0.0f, 1.0f, 0.0f));
 
     m_pGrid->render(mView, mProj);
