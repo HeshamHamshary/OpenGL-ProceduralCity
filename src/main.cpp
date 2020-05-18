@@ -3,14 +3,14 @@
 #include <glm/glm.hpp>
 #include "../wolf/wolf.h"
 #include "../samplefw/SampleRunner.h"
-#include "sampleAlphaTest.h"
+#include "sampleModel.h"
 
 class Week2: public App
 {
 public:
     Week2() : App("Week 4")
     {
-        m_sampleRunner.addSample(new SampleAlphaTest(this));
+        m_sampleRunner.addSample(new SampleModel(this));
     }
 
     ~Week2()
