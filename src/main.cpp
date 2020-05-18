@@ -5,10 +5,10 @@
 #include "../samplefw/SampleRunner.h"
 #include "sampleModel.h"
 
-class Week2: public App
+class Week2: public wolf::App
 {
 public:
-    Week2() : App("Week 4")
+    Week2() : wolf::App("Week 4")
     {
         m_sampleRunner.addSample(new SampleModel(this));
     }
