@@ -1,18 +1,16 @@
 #include "sampleModel.h"
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 
 class SingleMaterialProvider : public wolf::Model::MaterialProvider
 {
 public:
     SingleMaterialProvider(const std::string& matName) : m_matName(matName) { }
 
-    wolf::Material* getMaterial(int meshIndex, const std::string& matName) const override
+    wolf::Material* getMaterial(const std::string& nodeName, int subMeshIndex, const std::string& name) const override
     {
         // Regardless of what mesh index or mat name the model wants, we just
         // use the mat we were seeded with. Note that we create a new one each
-        // time so the DestroyMaterial calls line up. This could be improved.
+        // time so the DestroyMaterial calls line up. This could be improved,
+        // but they do share shaders.
         return wolf::MaterialManager::CreateMaterial(m_matName);
     }
 
@@ -34,13 +32,15 @@ void SampleModel::init()
 	// Only init if not already done
     if(!m_pModel)
     {
-        wolf::Material* pMat = wolf::MaterialManager::CreateMaterial("mesh");
-        pMat->SetProgram("data/cube.vsh", "data/cube.fsh");
+        wolf::Texture* pTex = wolf::TextureManager::CreateTexture("data/metal.dds");
+
+        wolf::Material* pMat = wolf::MaterialManager::CreateMaterial("unreal");
+        pMat->SetProgram("data/unreal.vsh", "data/unreal.fsh");
         pMat->SetDepthTest(true);
         pMat->SetDepthWrite(true);
-        pMat->SetUniform("albedo", glm::vec4(0.4f,0.8f,0.3f,1.0f));
+        pMat->SetTexture("tex", pTex);
 
-        SingleMaterialProvider matProvider("mesh");
+        SingleMaterialProvider matProvider("unreal");
         m_pModel = new wolf::Model("data/unreal.fbx", matProvider);
 
         glm::vec3 min = m_pModel->getAABBMin();
@@ -52,6 +52,7 @@ void SampleModel::init()
 
         float gridSize = 2.5f * wolf::max(max.x,max.z);
         m_pGrid = new Grid3D(10, gridSize / 10.0f);
+        m_pGrid->hideAxes();
     }
 
     printf("Successfully initialized Model Import Sample\n");

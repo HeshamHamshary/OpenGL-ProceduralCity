@@ -4,6 +4,7 @@
 #include "../wolf/wolf.h"
 #include "../samplefw/SampleRunner.h"
 #include "sampleModel.h"
+#include "sampleMultiModel.h"
 
 class Week2: public wolf::App
 {
@@ -11,6 +12,7 @@ public:
     Week2() : wolf::App("Week 4")
     {
         m_sampleRunner.addSample(new SampleModel(this));
+        m_sampleRunner.addSample(new SampleMultiModel(this));
     }
 
     ~Week2()
