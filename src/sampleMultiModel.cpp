@@ -42,7 +42,7 @@ void SampleMultiModel::init()
         {
             std::string name = std::string("mesh") + std::to_string(i);
             wolf::Material *pMat = wolf::MaterialManager::CreateMaterial(name);
-            pMat->SetProgram("data/cube.vsh", "data/cube.fsh");
+            pMat->SetProgram("data/mesh.vsh", "data/mesh.fsh");
             pMat->SetDepthTest(true);
             pMat->SetDepthWrite(true);
             pMat->SetUniform("albedo", glm::vec4(wolf::randFloat(), wolf::randFloat(), wolf::randFloat(), 1.0f));

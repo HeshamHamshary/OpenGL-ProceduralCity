@@ -35,9 +35,10 @@ void SampleModel::init()
         wolf::Texture* pTex = wolf::TextureManager::CreateTexture("data/metal.dds");
 
         wolf::Material* pMat = wolf::MaterialManager::CreateMaterial("unreal");
-        pMat->SetProgram("data/unreal.vsh", "data/unreal.fsh");
+        pMat->SetProgram("data/uber.vsh", "data/uber.fsh");
         pMat->SetDepthTest(true);
         pMat->SetDepthWrite(true);
+        // pMat->EnableKeyword("FOO");
         pMat->SetTexture("tex", pTex);
 
         SingleMaterialProvider matProvider("unreal");
