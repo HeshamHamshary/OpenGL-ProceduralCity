@@ -11,7 +11,7 @@ public:
         // use the mat we were seeded with. Note that we create a new one each
         // time so the DestroyMaterial calls line up. This could be improved,
         // but they do share shaders.
-        return wolf::MaterialManager::CreateMaterial(m_matName);
+        return nullptr;//wolf::MaterialManager::CreateMaterial(m_matName);
     }
 
 private:
@@ -38,8 +38,8 @@ void SampleModel::init()
         pMat->SetProgram("data/uber.vsh", "data/uber.fsh");
         pMat->SetDepthTest(true);
         pMat->SetDepthWrite(true);
-        // pMat->EnableKeyword("FOO");
-        pMat->SetTexture("tex", pTex);
+        pMat->EnableKeyword("ALBEDO_TEX");
+        pMat->SetTexture("albedo", pTex);
 
         SingleMaterialProvider matProvider("unreal");
         m_pModel = new wolf::Model("data/unreal.fbx", matProvider);

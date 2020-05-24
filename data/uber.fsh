@@ -1,4 +1,8 @@
-uniform sampler2D tex;
+#ifdef ALBEDO_TEX
+uniform sampler2D u_albedoTex;
+#else
+uniform vec4 u_albedo;
+#endif
 
 in vec4 v_normal;
 in vec2 v_uv1;
@@ -9,10 +13,11 @@ const vec3 LIGHT_DIR = vec3(0.0,0.707,0.707);
 
 void main()
 {
-#ifdef FOO
-    PixelColor = texture(tex, v_uv1) * max(0, dot(v_normal.xyz, LIGHT_DIR));
+    float NoL = max(0, dot(normalize(v_normal.xyz), LIGHT_DIR));
+#ifdef ALBEDO_TEX
+    PixelColor = texture(u_albedoTex, v_uv1) * NoL;
 #else
-    PixelColor = texture(tex, v_uv1);
+    PixelColor = u_albedo * vec4(NoL,NoL,NoL,1);
 #endif
 }
 

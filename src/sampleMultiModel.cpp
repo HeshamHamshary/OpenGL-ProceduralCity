@@ -13,7 +13,7 @@ public:
         // Note that we create a new one each time so the DestroyMaterial 
         // calls line up. This could be improved, but they do share shaders.
         int choice = rand() % m_matNames.size();
-        return wolf::MaterialManager::CreateMaterial(m_matNames[choice]);
+        return nullptr;//wolf::MaterialManager::CreateMaterial(m_matNames[choice]);
     }
 
 private:

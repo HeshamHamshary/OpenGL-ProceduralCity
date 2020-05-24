@@ -13,5 +13,5 @@ void main()
 {
     gl_Position = projection * view * world * a_position;
     v_uv1 = a_uv1;
-    v_normal = world * vec4(a_normal, 0.0);
+    v_normal = normalize(world * vec4(a_normal, 0.0));
 }
