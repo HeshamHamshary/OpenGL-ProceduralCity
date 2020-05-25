@@ -5,6 +5,7 @@
 #include "../samplefw/SampleRunner.h"
 #include "sampleModel.h"
 #include "sampleMultiModel.h"
+#include "sampleOverrideMat.h"
 
 class Week2: public wolf::App
 {
@@ -13,6 +14,7 @@ public:
     {
         m_sampleRunner.addSample(new SampleModel(this));
         m_sampleRunner.addSample(new SampleMultiModel(this));
+        m_sampleRunner.addSample(new SampleOverrideMat(this));
     }
 
     ~Week2()

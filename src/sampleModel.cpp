@@ -1,23 +1,5 @@
 #include "sampleModel.h"
 
-class SingleMaterialProvider : public wolf::Model::MaterialProvider
-{
-public:
-    SingleMaterialProvider(const std::string& matName) : m_matName(matName) { }
-
-    wolf::Material* getMaterial(const std::string& nodeName, int subMeshIndex, const std::string& name) const override
-    {
-        // Regardless of what mesh index or mat name the model wants, we just
-        // use the mat we were seeded with. Note that we create a new one each
-        // time so the DestroyMaterial calls line up. This could be improved,
-        // but they do share shaders.
-        return nullptr;//wolf::MaterialManager::CreateMaterial(m_matName);
-    }
-
-private:
-    std::string m_matName;
-};
-
 SampleModel::~SampleModel()
 {
 	printf("Destroying Model Import Sample\n");
@@ -32,17 +14,7 @@ void SampleModel::init()
 	// Only init if not already done
     if(!m_pModel)
     {
-        wolf::Texture* pTex = wolf::TextureManager::CreateTexture("data/metal.dds");
-
-        wolf::Material* pMat = wolf::MaterialManager::CreateMaterial("unreal");
-        pMat->SetProgram("data/uber.vsh", "data/uber.fsh");
-        pMat->SetDepthTest(true);
-        pMat->SetDepthWrite(true);
-        pMat->EnableKeyword("ALBEDO_TEX");
-        pMat->SetTexture("albedo", pTex);
-
-        SingleMaterialProvider matProvider("unreal");
-        m_pModel = new wolf::Model("data/unreal.fbx", matProvider);
+        m_pModel = new wolf::Model("data/unreal.fbx");
 
         glm::vec3 min = m_pModel->getAABBMin();
         glm::vec3 max = m_pModel->getAABBMax();
