@@ -3,29 +3,17 @@
 #include <glm/glm.hpp>
 #include "../wolf/wolf.h"
 #include "../samplefw/SampleRunner.h"
-#include "sampleDepthTest.h"
-#include "sampleAlphaTest.h"
-#include "sampleBlending.h"
-#include "sampleMaterial.h"
-#include "sampleModel.h"
-#include "sampleMultiModel.h"
-#include "sampleOverrideMat.h"
+#include "sampleCity.h"
 
-class Week2: public wolf::App
+class ProceduralCityscape: public wolf::App
 {
 public:
-    Week2() : wolf::App("Week 4")
+    ProceduralCityscape() : wolf::App("Procedural City")
     {
-        m_sampleRunner.addSample(new SampleDepthTest(this));
-        m_sampleRunner.addSample(new SampleAlphaTest(this));
-        m_sampleRunner.addSample(new SampleBlending(this));
-        m_sampleRunner.addSample(new SampleMaterial(this));
-        m_sampleRunner.addSample(new SampleModel(this));
-        m_sampleRunner.addSample(new SampleMultiModel(this));
-        m_sampleRunner.addSample(new SampleOverrideMat(this));
+        m_sampleRunner.addSample(new SampleCity(this));
     }
 
-    ~Week2()
+    ~ProceduralCityscape()
     {
     }
 
@@ -55,6 +43,6 @@ private:
 };
 
 int main(int, char**) {
-    Week2 week2;
-    week2.run();
+    ProceduralCityscape cityScape;
+    cityScape.run();
 }
